@@ -1,0 +1,28 @@
+const http      = require('http');
+const url       = require('url');
+const processos = require("./processos.js");
+const express   = require('express');
+var bodyParser = require('body-parser');
+const login = require("./validation/validation.js");
+const app = express();
+const port = 3035;
+var urlencodedParser = bodyParser.urlencoded({ extended: true })
+
+
+
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`)
+})
+
+app.get('/', (req, res) => {
+  res.send('Bem vindo a minha api do chat maxone')
+})
+
+app.get('/usersid/:id'        , urlencodedParser,processos.getUsersId);
+app.get('/users'              , urlencodedParser,processos.getUsers);
+app.post('/addusers'          , urlencodedParser,login.loginValidator,processos.addUsers);
+app.put('/updateusers/:id'    , urlencodedParser,login.loginValidator,processos.updateUser);
+app.delete('/deleteeusers/:id', urlencodedParser,processos.deleteUsers);
+
+
+
