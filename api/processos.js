@@ -5,6 +5,31 @@ var urlencodedParser = bodyParser.urlencoded({ extended: true })
 const client=Client.client()
 
 
+const getUsersLogiPassword=(request, response) => {
+   
+      if (request.body.login==undefined || request.body.password==undefined) {
+            return response.status(400).json({ errors: [{msg:'Parametro não encontrado ou id vazio'}] });
+      }
+
+   let login = request.body.login;
+   let password = request.body.password;
+
+  client.query(`SELECT * FROM users where login='${login}' and password='${password}'`, (error, results) => {
+    if (error) {
+        console.log("Erro ao tentar buscar dados");
+      throw error
+    }else{
+          //res.sendFile(__dirname + '/static/index.html');
+        if(results.rows.length==0){
+          return response.status(400).json({data:{msg:"Usuario o senha não encontrado !!"}});     
+        }
+        response.status(200).json({data:results.rows,status:1}) 
+    }
+    
+  })
+
+}
+
 
 const getUsers = (request, response) => {
   client.query('SELECT * FROM users ', (error, results) => {
@@ -54,7 +79,6 @@ const addUsers = (request, response) => {
 
   client.query('insert into users(login,password,admin) values($1,$2,$3) RETURNING *',[login, password,admin], (error, results) => {
     if (error) {
-        console.log(error)
         response.status(500).json({menssagem:"Erro ao tentar grava os dados!!!"})
         throw error
     }else{
@@ -136,5 +160,6 @@ module.exports = {
    getUsersId,
    addUsers,
    updateUser,
-   deleteUsers
+   deleteUsers,
+   getUsersLogiPassword
 }
