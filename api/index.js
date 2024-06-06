@@ -14,6 +14,12 @@ app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`)
 })
 
+ app.use(function(req, res, next) {
+     res.header("Access-Control-Allow-Origin", "*");
+     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+     next();
+ });
+
 app.get('/', (req, res) => {
   res.send('Bem vindo a minha api do chat maxone')
 })
