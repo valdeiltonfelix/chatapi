@@ -23,6 +23,8 @@ app.listen(port, () => {
 app.get('/', (req, res) => {
   res.send('Bem vindo a minha api do chat maxone')
 })
+
+app.post('/logado' , urlencodedParser,processos.getUsersLogado);
 app.post('/login' , urlencodedParser,processos.getUsersLogiPassword);
 app.get('/usersid/:id'            , urlencodedParser,processos.getUsersId);
 app.get('/users'                  , urlencodedParser,processos.getUsers);
