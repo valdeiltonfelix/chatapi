@@ -18,9 +18,10 @@ exports.up = (pgm) => {
     pgm.createTable('logado', {
     id_login:  { type: 'bigserial',
                  notNull: true,
-                 primaryKey:true,
                  references:'users(id)' },
     logado: { type:'boolean',default:false },
+    id_sessao:{type:'varchar(500)'},
+    color:{type:'varchar(300)'},
     createdAt: {
       type: 'timestamp',
       notNull: true,

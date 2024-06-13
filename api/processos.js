@@ -7,12 +7,15 @@ const client=Client.client()
 
 const getUsersLogiPassword=(request, response) => {
    
-      if (request.body.login==undefined || request.body.password==undefined) {
+      if (request.body.login==undefined ||
+          request.body.password==undefined) {
             return response.status(400).json({ errors: [{msg:'Parametro não encontrado ou id vazio'}] });
       }
 
-   let login = request.body.login;
+   let login    = request.body.login;
    let password = request.body.password;
+   let idsessao = request.body.idsessao;
+   let color    = request.body.color;
 
   client.query(`SELECT * FROM users where login='${login}' and password='${password}'`, (error, results) => {
     if (error) {
@@ -22,8 +25,21 @@ const getUsersLogiPassword=(request, response) => {
           //res.sendFile(__dirname + '/static/index.html');
         if(results.rows.length==0){
           return response.status(400).json({data:{msg:"Usuario o senha não encontrado !!"}});     
+        }else{
+    
+            client.query(`update logado set logado=false where id_login=${results.rows[0].id}`);
+            client.query(`insert into logado(id_login,
+                                             id_sessao,
+                                             color,
+                                             logado) 
+                                             values(
+                                             '${results.rows[0].id}',
+                                             '${idsessao}',
+                                             '${color}','true')`);
+
+            response.status(200).json({data:results.rows,status:1})
         }
-        response.status(200).json({data:results.rows,status:1}) 
+         
     }
     
   })
