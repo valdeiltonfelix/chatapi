@@ -155,11 +155,23 @@ const deleteUsers = (request, response) => {
 
 }
 
+const getUsersLogado = (request, response) => {
+  client.query('SELECT * FROM logado where logado=$1',true, (error, results) => {
+    if (error) {
+        console.log(error)
+      throw error
+    }
+    response.status(200).json(results.rows)
+  })
+
+}
+
 module.exports = {
    getUsers,
    getUsersId,
    addUsers,
    updateUser,
    deleteUsers,
-   getUsersLogiPassword
+   getUsersLogiPassword,
+   getUsersLogado
 }
