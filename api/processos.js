@@ -156,7 +156,7 @@ const deleteUsers = (request, response) => {
 }
 
 const getUsersLogado = (request, response) => {
-  client.query('SELECT * FROM logado where logado=$1',true, (error, results) => {
+  client.query('SELECT * FROM logado where logado=$1',[true], (error, results) => {
     if (error) {
         console.log(error)
       throw error
