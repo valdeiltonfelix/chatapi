@@ -48,7 +48,7 @@ const getUsersLogiPassword=(request, response) => {
 
 
 const getUsers = (request, response) => {
-  client.query('SELECT * FROM users ', (error, results) => {
+  client.query('SELECT id,login,admin FROM users ', (error, results) => {
     if (error) {
         console.log(error)
       throw error

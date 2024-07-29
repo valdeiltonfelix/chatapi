@@ -14,6 +14,8 @@ exports.up = (pgm) => {
       default: pgm.func('current_timestamp'),
     },
   });
+pgm.addConstraint('users', 'unique_login', ' UNIQUE(login)', { error:
+'Login ja cadastrado' });
 
     pgm.createTable('logado', {
     id_login:  { type: 'bigserial',
