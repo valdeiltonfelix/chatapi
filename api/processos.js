@@ -93,6 +93,29 @@ const addUsers = (request, response) => {
       admin=false;      
    }
 
+ client.query('select * from users where login=$1',[login], (error, results) => {
+
+       if(results.rows.length>0){
+          response.status(500).json({menssagem:"Usuário ja cadastrado"})
+       return false;
+
+       }else{
+           
+	   client.query('insert into users(login,password,admin) values($1,$2,$3) RETURNING *',[login, password,admin], (error, results) => {
+    if (error) {
+        response.status(500).json({menssagem:"Erro ao tentar grava os dados!!!"})
+        throw error
+    }else{
+      response.status(201).send(`Usuario adcionado com sucesso \n ID: ${results.rows[0]['id']}`)
+    }
+
+  })
+       }
+        
+ });  
+/*
+	
+
   client.query('insert into users(login,password,admin) values($1,$2,$3) RETURNING *',[login, password,admin], (error, results) => {
     if (error) {
         response.status(500).json({menssagem:"Erro ao tentar grava os dados!!!"})
@@ -101,7 +124,7 @@ const addUsers = (request, response) => {
       response.status(201).send(`Usuario adcionado com sucesso \n ID: ${results.rows[0]['id']}`)
     }
     
-  })
+  })*/
 
 }
 
@@ -172,7 +195,7 @@ const deleteUsers = (request, response) => {
 }
 
 const getUsersLogado = (request, response) => {
-  client.query('select id,login from logado inner join users on users.id=id_login where logado=$1',[true], (error, results) => {
+  client.query('select * from logado inner join users on users.id=id_login where logado=$1',[true], (error, results) => {
     if (error) {
         console.log(error)
       throw error
