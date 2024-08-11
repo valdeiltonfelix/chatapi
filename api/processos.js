@@ -27,7 +27,7 @@ const getUsersLogiPassword=(request, response) => {
           return response.status(400).json({data:{msg:"Usuario o senha não encontrado !!"}});     
         }else{
     
-            client.query(`update logado set logado=false where id_login=${results.rows[0].id}`);
+            // client.query(`update logado set logado=false where id_login=${results.rows[0].id}`);
             client.query(`insert into logado(id_login,
                                              id_sessao,
                                              color,
