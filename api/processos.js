@@ -16,18 +16,32 @@ const getUsersLogiPassword=(request, response) => {
    let password = request.body.password;
    let idsessao = request.body.idsessao;
    let color    = request.body.color;
+   
+client.query(`select * from logado inner join users on users.id=id_login where login='${login}' and logado=$1 `,[true], (err, res) => {
+    if (err) {
+        console.log(err)
+      throw err
+    }
+    if(res.rows.length>0){
+	    
+              return response.status(400).json({data:{msg:"Usuario logado em outra sessão !!"}});
+	
+    }else{
+  
+
 
   client.query(`SELECT * FROM users where login='${login}' and password='${password}'`, (error, results) => {
     if (error) {
         console.log("Erro ao tentar buscar dados");
       throw error
     }else{
-          //res.sendFile(__dirname + '/static/index.html');
+          //res.sendFile(__dirname + '/static/index.html')
+
         if(results.rows.length==0){
           return response.status(400).json({data:{msg:"Usuario o senha não encontrado !!"}});     
         }else{
     
-            // client.query(`update logado set logado=false where id_login=${results.rows[0].id}`);
+            client.query(`update logado set logado=false where id_login=${results.rows[0].id}`);
             client.query(`insert into logado(id_login,
                                              id_sessao,
                                              color,
@@ -43,7 +57,10 @@ const getUsersLogiPassword=(request, response) => {
     }
     
   })
+ 
+}
 
+ })
 }
 
 
